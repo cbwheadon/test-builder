@@ -15,7 +15,7 @@ program
   .option('-t, --task [type]', 'Add task id')
   .option('-c --csv [type]', 'Path to csv file')
   .option('-f --filter [type]', 'Filter for pupils')
-  .option('-b --booklets [type]', 'Booklet list')
+  .option('-b --booklets <items>', 'Booklet list')
   .parse(process.argv);
 
 console.log('you are inserting:');
@@ -38,6 +38,7 @@ if(program.pupils){
 }
 
 if(program.script){
+  console.log(' list: %j', program.booklets);
   scriptWorker.createScripts(program.task, program.filter, program.booklets, function(err, msg){
       if (err) {
         console.log (err);
