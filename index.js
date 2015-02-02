@@ -7,6 +7,7 @@
 var program = require('commander');
 var pupilWorker = require('./lib/pupil-worker');
 var scriptWorker = require('./lib/script-worker');
+var qrWorker= require('./lib/qr-worker');
 
 program
   .version('0.0.1')
@@ -16,12 +17,14 @@ program
   .option('-c --csv [type]', 'Path to csv file')
   .option('-f --filter [type]', 'Filter for pupils')
   .option('-b --booklets <items>', 'Booklet list')
+  .option('-q --qrcodes', 'Generate png images of qrcodes')
   .parse(process.argv);
 
-console.log('you are inserting:');
 if (program.pupils) console.log(' pupils');
-if (program.script) console.log('  scripts');
-console.log('to task %s', program.task);
+if (program.script) console.log(' scripts');
+if (program.qrcodes) console.log(' qrcodes');
+
+console.log('for task %s', program.task);
 
 if(program.pupils){
   if(!program.csv){
@@ -46,4 +49,18 @@ if(program.script){
         console.log(msg);
       }
   });
+}
+
+if(program.qrcodes){
+  if(!program.task){
+    console.log('No task provided');
+  } else {
+    qrWorker.genImages(program.task, function(err, msg){
+      if(err){
+        console.log(err);
+      } else {
+        console.log(msg);
+      }
+    });
+  }
 }
